@@ -1,0 +1,333 @@
+services:
+  postgresdb:
+    image: postgres:17
+    shm_size: 1g
+    ports:
+      - "5432:5432"
+    command: postgres -c 'max_connections=250'
+    environment:
+      POSTGRES_PASSWORD: "Pass1234!"
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+    restart: always
+
+  minio:
+    image: minio/minio
+    ports:
+      - "9090:9090"
+      - "9000:9000"
+    environment:
+      MINIO_ROOT_USER: "admin"
+      MINIO_ROOT_PASSWORD: "Pass1234!"
+    volumes:
+      - ./minio/data:/mnt/data
+    command: server --console-address ":9090" /mnt/data
+    restart: always
+
+  redis:
+    image: redis:6.2.6-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass Pass1234!
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+    restart: always
+
+  rabbitmq:
+    image: hungnn2810/rabbitmq:latest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15674:15674"
+    volumes:
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq/data:/var/lib/rabbitmq
+    restart: always
+
+  seq:
+    image: datalust/seq:latest
+    ports:
+      - "5341:80"
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_API_KEY: "WBPq4wjBhGll1QlL9m6r"
+      SEQ_FIRSTRUN_NOAUTHENTICATION: "true"
+    restart: always
+
+  api-gateway:
+    image: kztek/psi8-api-gateway:latest-main
+    ports:
+      - "5000:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      Logging__Seq: "http://seq:5341/ingest/otlp/v1/logs"
+    restart: always
+
+  idp-migration:
+    image: kztek/psi8-identity-service:migration-latest-main
+    environment:
+      ROUNDHOUSE_ENVIRONMENT: "PROD"
+      SPA_REDIRECTURI: "${WEB_URL}"
+    depends_on:
+      - postgresdb
+    restart: on-failure
+
+  idp:
+    image: kztek/psi8-identity-service:latest-main
+    ports:
+      - "3000:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      Logging__Seq: "http://seq:5341/ingest/otlp/v1/logs"
+      Certificate__Name: "idp.pfx"
+      Certificate__Password: "rgtdyYePt9QtqyUydBa2Lpj8Ts9cr2Mej6GJCxfj4Y2N"
+      Authentication__Authority: "${OAUTH}"
+      Authentication__IntrospectionEndpoint: "${OAUTH}/connect/introspect"
+      Authentication__Issuer: "${OAUTH}"
+      Authentication__ClientId: "34c5f942-aec6-48ec-8547-ed947b7606d2"
+      Authentication__ClientSecret: "CU8cEU3yJ4hCEd6QAB"
+      Authentication__ApiScopeName: "client-data"
+      Authentication__ApiScopeSecret: "zOqEuKHnB8Cz6eFVxGzCnMac0ZsQ3w"
+      ConnectionStrings__Default: "User ID=postgres;Password=Pass1234!;Host=postgresdb;Port=5432;Database=identity;Pooling=true;"
+      Redis__Host: "redis"
+      Redis__Ssl: "false"
+      Redis__Password: "Pass1234!"
+      Redis__Database: "1"
+      Api__AccessControl: "http://access-control-service:8080"
+      Api__User: "http://user-service:8080"
+      Api__Configuration: "http://configuration-service:8080"
+    depends_on:
+      - postgresdb
+      - idp-migration
+    restart: always
+
+  access-control-migration:
+    image: kztek/psi8-access-control-service:migration-latest-main
+    depends_on:
+      - postgresdb
+    restart: on-failure
+
+  access-control-service:
+    image: kztek/psi8-access-control-service:latest-main
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      Logging__Seq: "http://seq:5341/ingest/otlp/v1/logs"
+      Authentication__Authority: "${OAUTH}"
+      Authentication__IntrospectionEndpoint: "${OAUTH}/connect/introspect"
+      Authentication__Issuer: "${OAUTH}"
+      Authentication__ClientId: "34c5f942-aec6-48ec-8547-ed947b7606d2"
+      Authentication__ClientSecret: "CU8cEU3yJ4hCEd6QAB"
+      Authentication__ApiScopeName: "role-data"
+      Authentication__ApiScopeSecret: "D3fxfsHvPzQJRKLFjrnjJpGV34EZEV"
+      ConnectionStrings__Default: "User ID=postgres;Password=Pass1234!;Host=postgresdb;Port=5432;Database=accesscontrol;Pooling=true;"
+      Redis__Host: "redis"
+      Redis__Ssl: "false"
+      Redis__Password: "Pass1234!"
+      Redis__Database: "1"
+      Api__User: "http://user-service:8080"
+    depends_on:
+      - postgresdb
+      - access-control-migration
+    restart: always
+
+  user-migration:
+    image: kztek/psi8-user-service:migration-latest-main
+    depends_on:
+      - postgresdb
+    restart: on-failure
+
+  user-service:
+    image: kztek/psi8-user-service:latest-main
+    ports:
+      - "3002:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      Logging__Seq: "http://seq:5341/ingest/otlp/v1/logs"
+      Authentication__Authority: "${OAUTH}"
+      Authentication__IntrospectionEndpoint: "${OAUTH}/connect/introspect"
+      Authentication__Issuer: "${OAUTH}"
+      Authentication__ClientId: "34c5f942-aec6-48ec-8547-ed947b7606d2"
+      Authentication__ClientSecret: "CU8cEU3yJ4hCEd6QAB"
+      Authentication__ApiScopeName: "user-data"
+      Authentication__ApiScopeSecret: "UNMBQTgmuWdR8NsVZuDUKUNqe7b2c5"
+      ConnectionStrings__Default: "User ID=postgres;Password=Pass1234!;Host=postgresdb;Port=5432;Database=users;Pooling=true;"
+      Redis__Host: "redis"
+      Redis__Ssl: "false"
+      Redis__Password: "Pass1234!"
+      Redis__Database: "1"
+      Api__AccessControl: "http://access-control-service:8080"
+    depends_on:
+      - postgresdb
+      - user-migration
+    restart: always
+
+  resource-migration:
+    image: kztek/psi8-resource-service:migration-latest-main
+    depends_on:
+      - postgresdb
+    restart: on-failure
+
+  resource-service:
+    image: kztek/psi8-resource-service:latest-main
+    ports:
+      - "3003:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      Logging__Seq: "http://seq:5341/ingest/otlp/v1/logs"
+      Authentication__Authority: "${OAUTH}"
+      Authentication__IntrospectionEndpoint: "${OAUTH}/connect/introspect"
+      Authentication__Issuer: "${OAUTH}"
+      Authentication__ClientId: "34c5f942-aec6-48ec-8547-ed947b7606d2"
+      Authentication__ClientSecret: "CU8cEU3yJ4hCEd6QAB"
+      Authentication__ApiScopeName: "resource-data"
+      Authentication__ApiScopeSecret: "SJjPt72I7EiGSGXvyFab1262NrGPAo"
+      ConnectionStrings__Default: "User ID=postgres;Password=Pass1234!;Host=postgresdb;Port=5432;Database=resource;Pooling=true;"
+      Redis__Host: "redis"
+      Redis__Ssl: "false"
+      Redis__Password: "Pass1234!"
+      Redis__Database: "1"
+      RabbitMq__Host: "rabbitmq"
+      RabbitMq__Username: "rabbitmq"
+      RabbitMq__Password: "Pass1234!"
+      S3__Endpoint: "minio:9000"
+      S3__Ssl: "false"
+      S3__AccessKey: "admin"
+      S3__SecretKey: "Pass1234!"
+      Api__Event: "http://event-service:8080"
+      Api__User: "http://user-service:8080"
+      Api__App: "http://192.168.21.201:8081"
+    depends_on:
+      - redis
+      - resource-migration
+    restart: always
+
+  resource-function:
+    image: kztek/psi8-resource-service:function-latest-main
+    environment:
+      Logging__Seq: "http://seq:5341/ingest/otlp/v1/logs"
+      ConnectionStrings__Default: "User ID=postgres;Password=Pass1234!;Host=postgresdb;Port=5432;Database=resource;Pooling=true;"
+      Authentication__Authority: "${OAUTH}"
+      Authentication__ClientId: "34c5f942-aec6-48ec-8547-ed947b7606d2"
+      Authentication__ClientSecret: "CU8cEU3yJ4hCEd6QAB"
+      RabbitMq__Host: "rabbitmq"
+      RabbitMq__Username: "rabbitmq"
+      RabbitMq__Password: "Pass1234!"
+      Redis__Host: "redis"
+      Redis__Ssl: "false"
+      Redis__Password: "Pass1234!"
+      Redis__Database: "1"
+      Api__Event: "http://event-service:8080"
+    depends_on:
+      - postgresdb
+      - rabbitmq
+    restart: always
+
+  configuration-migration:
+    image: kztek/psi8-configuration-service:migration-latest-main
+    depends_on:
+      - postgresdb
+    restart: on-failure
+
+  configuration-service:
+    image: kztek/psi8-configuration-service:latest-main
+    ports:
+      - "3004:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      Logging__Seq: "http://seq:5341/ingest/otlp/v1/logs"
+      Authentication__Authority: "${OAUTH}"
+      Authentication__IntrospectionEndpoint: "${OAUTH}/connect/introspect"
+      Authentication__Issuer: "${OAUTH}"
+      Authentication__ClientId: "34c5f942-aec6-48ec-8547-ed947b7606d2"
+      Authentication__ClientSecret: "CU8cEU3yJ4hCEd6QAB"
+      Authentication__ApiScopeName: "config-data"
+      Authentication__ApiScopeSecret: "PbMY9GpgTau0uAHPX48GXmg9YZWV07"
+      ConnectionStrings__Default: "User ID=postgres;Password=Pass1234!;Host=postgresdb;Port=5432;Database=configuration;Pooling=true;"
+      Redis__Host: "redis"
+      Redis__Ssl: "false"
+      Redis__Password: "Pass1234!"
+      Redis__Database: "1"
+      RabbitMq__Host: "rabbitmq"
+      RabbitMq__Username: "rabbitmq"
+      RabbitMq__Password: "Pass1234!"
+      Api__User: "http://user-service:8080"
+    depends_on:
+      - postgresdb
+      - configuration-migration
+    restart: always
+
+  event-migration:
+    image: kztek/psi8-event-service:migration-latest-main
+    depends_on:
+      - postgresdb
+    restart: on-failure
+
+  event-service:
+    image: kztek/psi8-event-service:latest-main
+    ports:
+      - "3005:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      Logging__Seq: "http://seq:5341/ingest/otlp/v1/logs"
+      Authentication__Authority: "${OAUTH}"
+      Authentication__IntrospectionEndpoint: "${OAUTH}/connect/introspect"
+      Authentication__Issuer: "${OAUTH}"
+      Authentication__ClientId: "34c5f942-aec6-48ec-8547-ed947b7606d2"
+      Authentication__ClientSecret: "CU8cEU3yJ4hCEd6QAB"
+      Authentication__ApiScopeName: "event-data"
+      Authentication__ApiScopeSecret: "UannsxPf3PnNlT8uuA3NdEtbJIqKEV"
+      ConnectionStrings__Default: "User ID=postgres;Password=Pass1234!;Host=postgresdb;Port=5432;Database=event;Pooling=true;"
+      Redis__Host: "redis"
+      Redis__Ssl: "false"
+      Redis__Password: "Pass1234!"
+      Redis__Database: "1"
+      Api__Configuration: "http://configuration-service:8080"
+      Api__Resource: "http://resource-service:8080"
+      Api__User: "http://user-service:8080"
+      S3__Endpoint: "14.160.26.45:12549"
+      S3__Ssl: "false"
+      S3__AccessKey: "admin"
+      S3__SecretKey: "Pass1234!"
+      RabbitMq__Host: "rabbitmq"
+      RabbitMq__Username: "rabbitmq"
+      RabbitMq__Password: "Pass1234!"
+    depends_on:
+      - postgresdb
+      - event-migration
+    restart: always
+
+  event-function:
+    image: kztek/psi8-event-service:function-latest-main
+    environment:
+      Logging__Seq: "http://seq:5341/ingest/otlp/v1/logs"
+      ConnectionStrings__Default: "User ID=postgres;Password=Pass1234!;Host=postgresdb;Port=5432;Database=event;Pooling=true;"
+      RabbitMq__Host: "rabbitmq"
+      RabbitMq__Username: "rabbitmq"
+      RabbitMq__Password: "Pass1234!"
+      Redis__Host: "redis"
+      Redis__Ssl: "false"
+      Redis__Password: "Pass1234!"
+      Redis__Database: "1"
+      Api__Resource: "http://resource-service:8080"
+    depends_on:
+      - postgresdb
+      - rabbitmq
+    restart: always
+
+  webapp:
+    image: kztek/psi8-webapp:latest-main
+    ports:
+      - "2000:80"
+    environment:
+      OAUTH: "${OAUTH}"
+      API_GATEWAY: "${API_GATEWAY}"
+      WEB_URL: "${WEB_URL}"
+      RABBITMQ_STOMP_ENDPOINT: "${RABBITMQ_STOMP_ENDPOINT}"
+      RABBITMQ_SSL: "${RABBITMQ_SSL}"
+      RABBITMQ_USERNAME: "${RABBITMQ_USERNAME}"
+      RABBITMQ_PASSWORD: "${RABBITMQ_PASSWORD}"
+    restart: always

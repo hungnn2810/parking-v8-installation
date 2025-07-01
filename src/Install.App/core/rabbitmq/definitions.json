@@ -1,0 +1,323 @@
+{
+  "rabbit_version": "3.10.2",
+  "rabbitmq_version": "3.10.2",
+  "product_name": "RabbitMQ",
+  "product_version": "3.10.2",
+  "users": [
+    {
+      "name": "rabbitmq",
+      "password_hash": "CgRe+aSaiNGB/gxndpH8sya9nhHSL/inr7+q4jh8VwnwLTRf",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": ["administrator"],
+      "limits": {}
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "rabbitmq",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "topic_permissions": [],
+  "parameters": [],
+  "global_parameters": [
+    {
+      "name": "internal_cluster_id",
+      "value": "rabbitmq-cluster-id-WEzpwOV3jCufwdN8cp6Hbg"
+    }
+  ],
+  "policies": [],
+  "queues": [
+    {
+      "name": "event.function.customer_collection.changed.processing",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "event.function.customer.changed.processing",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "event.function.device.changed.processing",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "event.function.access_key_collection.changed.processing",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "event.function.access_key.changed.processing",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "event.function.voucher_type.changed.processing",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "event.function.transaction.changed.processing",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "event.function.config.changed.processing",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "event.function.blacklisted.changed.processing",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "resource.application.monitor.computer",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "resource.application.operator",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "event.application.control_center.operator",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "resource.application.event.customer_collection.changed",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "resource.application.event.customer.changed",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "resource.application.event.device.changed",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "resource.application.event.access_key_collection.changed",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "resource.application.event.access_key.changed",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "resource.application.event.voucher_type.changed",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "event.application.event.transaction.changed",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "configuration.application.event.config.changed",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "event.application.event.transaction.changed",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "resource.application.event.blacklisted.changed",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "access_control.event.monitor",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "resource.application.event.customer_collection.changed",
+      "vhost": "/",
+      "destination": "event.function.customer_collection.changed.processing",
+      "destination_type": "queue",
+      "routing_key": "all",
+      "arguments": {}
+    },
+    {
+      "source": "resource.application.event.customer.changed",
+      "vhost": "/",
+      "destination": "event.function.customer.changed.processing",
+      "destination_type": "queue",
+      "routing_key": "all",
+      "arguments": {}
+    },
+    {
+      "source": "resource.application.event.device.changed",
+      "vhost": "/",
+      "destination": "event.function.device.changed.processing",
+      "destination_type": "queue",
+      "routing_key": "all",
+      "arguments": {}
+    },
+    {
+      "source": "resource.application.event.access_key_collection.changed",
+      "vhost": "/",
+      "destination": "event.function.access_key_collection.changed.processing",
+      "destination_type": "queue",
+      "routing_key": "all",
+      "arguments": {}
+    },
+    {
+      "source": "resource.application.event.access_key.changed",
+      "vhost": "/",
+      "destination": "event.function.access_key.changed.processing",
+      "destination_type": "queue",
+      "routing_key": "all",
+      "arguments": {}
+    },
+    {
+      "source": "resource.application.event.voucher_type.changed",
+      "vhost": "/",
+      "destination": "event.function.voucher_type.changed.processing",
+      "destination_type": "queue",
+      "routing_key": "all",
+      "arguments": {}
+    },
+    {
+      "source": "event.application.event.transaction.changed",
+      "vhost": "/",
+      "destination": "event.function.transaction.changed.processing",
+      "destination_type": "queue",
+      "routing_key": "all",
+      "arguments": {}
+    },
+    {
+      "source": "configuration.application.event.config.changed",
+      "vhost": "/",
+      "destination": "event.function.config.changed.processing",
+      "destination_type": "queue",
+      "routing_key": "all",
+      "arguments": {}
+    },
+    {
+      "source": "resource.application.event.blacklisted.changed",
+      "vhost": "/",
+      "destination": "event.function.blacklisted.changed.processing",
+      "destination_type": "queue",
+      "routing_key": "all",
+      "arguments": {}
+    }
+  ]
+}
