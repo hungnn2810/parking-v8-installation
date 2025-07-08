@@ -7,20 +7,9 @@
         <UseWindowsForms>true</UseWindowsForms>
         <ImplicitUsings>enable</ImplicitUsings>
         <Platforms>AnyCPU;x64</Platforms>
-        <ApplicationIcon>bin\x64\Debug\icons8_spaceship_launch_documentation_2.ico</ApplicationIcon>
-        <PackageIcon>icons8_spaceship_launch_documentation_32px_1.png</PackageIcon>
+        <ApplicationIcon>icon.ico</ApplicationIcon>
+        <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
-
-    <ItemGroup>
-      <Content Include="bin\x64\Debug\icons8_spaceship_launch_documentation_2.ico" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="bin\x64\Debug\icons8_spaceship_launch_documentation_32px_1.png">
-        <Pack>True</Pack>
-        <PackagePath>\</PackagePath>
-      </None>
-    </ItemGroup>
 
     <ItemGroup>
       <Compile Update="Properties\Settings.Designer.cs">
@@ -43,6 +32,33 @@
       <None Update="Properties\Settings.settings">
         <Generator>SettingsSingleFileGenerator</Generator>
         <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      </None>
+      <None Update="icon.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="icon.ico">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="core\backup-scripts\identity.sh">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="core\setup-cron.sh">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="core\backup-scripts\users.sh">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="core\backup-scripts\resource.sh">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="core\backup-scripts\accesscontrol.sh">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="core\backup-scripts\configuration.sh">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="core\backup-scripts\event.sh">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
 

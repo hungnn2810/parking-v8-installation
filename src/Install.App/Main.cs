@@ -8,23 +8,26 @@ namespace Install.App;
 
 public partial class Main : Form
 {
-    private bool isSuccess = true;
-
     public Main()
     {
         InitializeComponent();
         Load += Main_Load;
-        chbIsAutoStart.CheckedChanged += ChbIsAutoStart_CheckedChanged;
     }
 
-    private void ChbIsAutoStart_CheckedChanged(object? sender, EventArgs e)
+    private async void Main_Load(object? sender, EventArgs e)
     {
-        Properties.Settings.Default.AutoStart = chbIsAutoStart.Checked;
-        Properties.Settings.Default.Save();
-    }
+        if (string.IsNullOrEmpty(Properties.Settings.Default.IpAddress))
+        {
+            return;
+        }
 
-    private void Main_Load(object? sender, EventArgs e)
-    {
+        tbxIpAddress.Text = Properties.Settings.Default.IpAddress;
+
+        if (string.IsNullOrEmpty(Properties.Settings.Default.NetworkInterface))
+        {
+            return;
+        }
+
         foreach (var item in NetworkInterface.GetAllNetworkInterfaces().OrderBy(n => n.Description))
         {
             cbNetworkInterfaces.Items.Add(item.Description);
@@ -37,21 +40,35 @@ public partial class Main : Form
             cbNetworkInterfaces.SelectedIndex = 0;
         }
 
-        tbxIpAddress.Text = Properties.Settings.Default.IpAddress;
-        tbxMaxDiskSize.Text = Properties.Settings.Default.MaxDiskSize.ToString();
-        nudCpus.Value = int.Parse(Properties.Settings.Default.Cpu.ToString());
-        nudRam.Value = int.Parse(Properties.Settings.Default.Ram.ToString());
-
-        if (string.IsNullOrEmpty(Properties.Settings.Default.IpAddress) || string.IsNullOrEmpty(Properties.Settings.Default.MaxDiskSize.ToString()) ||
-            string.IsNullOrEmpty(Properties.Settings.Default.Cpu.ToString()) || string.IsNullOrEmpty(Properties.Settings.Default.Ram.ToString()))
+        if (Properties.Settings.Default.Ram <= 7)
         {
             return;
         }
 
-        InitVagrantFileAsync();
-        SetEnvAsync();
-        InstallPluginAsync();
-        StartAsync();
+        nudRam.Value = Properties.Settings.Default.Ram;
+
+        if (Properties.Settings.Default.Cpu <= 5)
+        {
+            return;
+        }
+
+        nudCpus.Value = Properties.Settings.Default.Cpu;
+
+        if (Properties.Settings.Default.MaxDiskSize <= 49)
+        {
+            return;
+        }
+
+        tbxMaxDiskSize.Text = Properties.Settings.Default.MaxDiskSize.ToString();
+
+        if (string.IsNullOrEmpty(Properties.Settings.Default.DataDirectory))
+        {
+            return;
+        }
+
+        tbxDataDirectory.Text = Properties.Settings.Default.DataDirectory;
+
+        await StartAsync();
     }
 
     private void Main_KeyDown(object sender, KeyEventArgs e)
@@ -68,12 +85,12 @@ public partial class Main : Form
         return host.AddressList.Where(n => n.AddressFamily == AddressFamily.InterNetwork).Select(n => n.ToString());
     }
 
-    private void btnStart_Click(object sender, EventArgs e)
+    private async void btnStart_Click(object sender, EventArgs e)
     {
         var ipAddress = tbxIpAddress.Text.TrimStart().TrimEnd();
         if (GetLocalIpAddress().Contains(ipAddress))
         {
-            MessageBox.Show("Trùng IP", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Trùng địa chỉ IP", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
         }
 
@@ -111,27 +128,44 @@ public partial class Main : Form
             return;
         }
 
-        Properties.Settings.Default.IpAddress = ipAddress;
-        Properties.Settings.Default.NetworkInterface = cbNetworkInterfaces.Text;
-        Properties.Settings.Default.Cpu = cpu;
-        Properties.Settings.Default.Ram = ram;
-        Properties.Settings.Default.MaxDiskSize = maxDiskSize;
-        Properties.Settings.Default.Save();
-
-        rtbLogs.Visible = true;
-        rtbLogs.Clear();
-        Cursor = Cursors.WaitCursor;
-
-
-        Cursor = Cursors.Default;
-        if (!isSuccess)
+        var dataDirectory = tbxDataDirectory.Text;
+        if (string.IsNullOrWhiteSpace(dataDirectory))
         {
+            MessageBox.Show("Yêu cầu nhập đường dẫn dữ liệu", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
         }
+
+        Properties.Settings.Default.IpAddress = ipAddress;
+        Properties.Settings.Default.NetworkInterface = cbNetworkInterfaces.Text;
+        Properties.Settings.Default.Ram = ram;
+        Properties.Settings.Default.Cpu = cpu;
+        Properties.Settings.Default.MaxDiskSize = maxDiskSize;
+        Properties.Settings.Default.DataDirectory = dataDirectory;
+        Properties.Settings.Default.Save();
+
+        rtbLogs.Clear();
+        Cursor = Cursors.WaitCursor;
+        await StartAsync();
+        Cursor = Cursors.Default;
     }
 
-    private static async Task InitVagrantFileAsync()
+    private async Task StartAsync()
     {
+        WriteLog("Bắt đầu cài đặt");
+
+        await InitVagrantFileAsync();
+        await InitEnvironmentAsync();
+        await InstallVagrantPluginAsync();
+
+        await RunVagrantUpAsync();
+        WriteLog("Cài đặt thành công");
+    }
+
+    private async Task InitVagrantFileAsync()
+    {
+        EnsureExistDirectory($"{Properties.Settings.Default.DataDirectory}/minio");
+        EnsureExistDirectory($"{Properties.Settings.Default.DataDirectory}/db-backups");
+
         await Task.Run(() =>
         {
             try
@@ -147,7 +181,8 @@ public partial class Main : Form
                 content.AppendLine("  end");
                 content.AppendLine(
                     $"  config.vm.network \"public_network\", ip: \"{Properties.Settings.Default.IpAddress}\", bridge: \"{Properties.Settings.Default.NetworkInterface}\"");
-                content.AppendLine($"  config.vm.synced_folder \"{Properties.Settings.Default.ImageDirectory}\", \"/srv/psi8/minio\"");
+                content.AppendLine($"  config.vm.synced_folder \"{Properties.Settings.Default.DataDirectory}/minio\", \"/srv/psi8/minio\", mount_options: [\"dmode=775\", \"fmode=664\"]");
+                content.AppendLine($"  config.vm.synced_folder \"{Properties.Settings.Default.DataDirectory}/db-backups\", \"/srv/psi8/postgresql/backups\", mount_options: [\"dmode=775\", \"fmode=664\"]");
                 content.AppendLine("  config.vm.provision \"docker\"");
                 content.AppendLine("  config.vm.provision :shell, path: \"core/bootstrap.sh\", run: 'always'");
                 content.AppendLine("end");
@@ -161,7 +196,20 @@ public partial class Main : Form
         });
     }
 
-    private async Task SetEnvAsync()
+    private void EnsureExistDirectory(string directory)
+    {
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+            WriteLog($"Đã tạo thư mục: {directory}");
+        }
+        else
+        {
+            WriteLog($"Thư mục đã tồn tại: {directory}");
+        }
+    }
+
+    private static async Task InitEnvironmentAsync()
     {
         await Task.Run(() =>
         {
@@ -189,7 +237,7 @@ public partial class Main : Form
         });
     }
 
-    private async Task InstallPluginAsync()
+    private async Task InstallVagrantPluginAsync()
     {
         await Task.Run(() =>
         {
@@ -231,7 +279,7 @@ public partial class Main : Form
         });
     }
 
-    private async Task StartAsync()
+    private async Task RunVagrantUpAsync()
     {
         await Task.Run(() =>
         {
@@ -255,11 +303,7 @@ public partial class Main : Form
             {
                 if (!string.IsNullOrEmpty(args.Data))
                 {
-                    rtbLogs.Invoke(() =>
-                    {
-                        WriteLog(args.Data);
-                        isSuccess = false;
-                    });
+                    rtbLogs.Invoke(() => { WriteLog(args.Data); });
                 }
             };
 
@@ -267,7 +311,6 @@ public partial class Main : Form
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
             process.WaitForExit();
-            return isSuccess;
         });
     }
 
@@ -276,13 +319,22 @@ public partial class Main : Form
         rtbLogs.AppendText($"[{DateTime.Now:HH:m:s}]: {content}\r\n");
     }
 
-    private void btnImageDirectory_Click(object sender, EventArgs e)
+    public void rtbLogs_TextChanged(object sender, EventArgs e)
+    {
+        // set the current caret position to the end
+        rtbLogs.SelectionStart = rtbLogs.Text.Length;
+
+        // scroll it automatically
+        rtbLogs.ScrollToCaret();
+    }
+
+    private void btnDataDirectory_Click(object sender, EventArgs e)
     {
         using var fbd = new FolderBrowserDialog();
         var result = fbd.ShowDialog();
         if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
         {
-            tbxImageDirectory.Text = fbd.SelectedPath;
+            tbxDataDirectory.Text = fbd.SelectedPath.Replace("\\", "/");
         }
     }
 }

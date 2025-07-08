@@ -85,24 +85,12 @@ namespace Install.App.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ImageDirectory {
+        public string DataDirectory {
             get {
-                return ((string)(this["ImageDirectory"]));
+                return ((string)(this["DataDirectory"]));
             }
             set {
-                this["ImageDirectory"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AutoStart {
-            get {
-                return ((bool)(this["AutoStart"]));
-            }
-            set {
-                this["AutoStart"] = value;
+                this["DataDirectory"] = value;
             }
         }
     }

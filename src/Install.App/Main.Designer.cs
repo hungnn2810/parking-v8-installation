@@ -44,10 +44,9 @@ partial class Main
         cbNetworkInterfaces = new System.Windows.Forms.ComboBox();
         lblNetworkInterface = new System.Windows.Forms.Label();
         rtbLogs = new System.Windows.Forms.RichTextBox();
-        chbIsAutoStart = new System.Windows.Forms.CheckBox();
-        lblImageDirectory = new System.Windows.Forms.Label();
-        tbxImageDirectory = new System.Windows.Forms.TextBox();
-        btnImageDirectory = new System.Windows.Forms.Button();
+        lblDataDirectory = new System.Windows.Forms.Label();
+        tbxDataDirectory = new System.Windows.Forms.TextBox();
+        btnDataDirectory = new System.Windows.Forms.Button();
         ((System.ComponentModel.ISupportInitialize)nudCpus).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudRam).BeginInit();
         ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
@@ -55,7 +54,6 @@ partial class Main
         // 
         // lblIpAddress
         // 
-        lblIpAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
         lblIpAddress.AutoSize = true;
         lblIpAddress.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
         lblIpAddress.Location = new System.Drawing.Point(8, 8);
@@ -74,7 +72,6 @@ partial class Main
         // 
         // lblRam
         // 
-        lblRam.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
         lblRam.AutoSize = true;
         lblRam.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
         lblRam.Location = new System.Drawing.Point(680, 8);
@@ -85,7 +82,6 @@ partial class Main
         // 
         // lbl_Cpus
         // 
-        lbl_Cpus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
         lbl_Cpus.AutoSize = true;
         lbl_Cpus.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
         lbl_Cpus.Location = new System.Drawing.Point(456, 8);
@@ -114,11 +110,10 @@ partial class Main
         // 
         // btnStart
         // 
-        btnStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
         btnStart.BackColor = System.Drawing.Color.DodgerBlue;
         btnStart.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
         btnStart.ForeColor = System.Drawing.SystemColors.Window;
-        btnStart.Location = new System.Drawing.Point(681, 160);
+        btnStart.Location = new System.Drawing.Point(342, 168);
         btnStart.Name = "btnStart";
         btnStart.Size = new System.Drawing.Size(191, 34);
         btnStart.TabIndex = 0;
@@ -136,7 +131,6 @@ partial class Main
         // 
         // lblMaxDiskSize
         // 
-        lblMaxDiskSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
         lblMaxDiskSize.AutoSize = true;
         lblMaxDiskSize.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
         lblMaxDiskSize.Location = new System.Drawing.Point(236, 8);
@@ -173,7 +167,6 @@ partial class Main
         // 
         // lblNetworkInterface
         // 
-        lblNetworkInterface.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
         lblNetworkInterface.AutoSize = true;
         lblNetworkInterface.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
         lblNetworkInterface.Location = new System.Drawing.Point(8, 80);
@@ -185,68 +178,55 @@ partial class Main
         // rtbLogs
         // 
         rtbLogs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
-        rtbLogs.Location = new System.Drawing.Point(8, 200);
+        rtbLogs.Location = new System.Drawing.Point(8, 230);
         rtbLogs.Name = "rtbLogs";
-        rtbLogs.Size = new System.Drawing.Size(864, 283);
+        rtbLogs.Size = new System.Drawing.Size(864, 336);
         rtbLogs.TabIndex = 15;
         rtbLogs.Text = "";
+        rtbLogs.TextChanged += rtbLogs_TextChanged;
         // 
-        // chbIsAutoStart
+        // lblDataDirectory
         // 
-        chbIsAutoStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
-        chbIsAutoStart.AutoSize = true;
-        chbIsAutoStart.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
-        chbIsAutoStart.Location = new System.Drawing.Point(8, 160);
-        chbIsAutoStart.Name = "chbIsAutoStart";
-        chbIsAutoStart.Size = new System.Drawing.Size(187, 29);
-        chbIsAutoStart.TabIndex = 16;
-        chbIsAutoStart.Text = "Auto Start Server";
-        chbIsAutoStart.UseVisualStyleBackColor = true;
+        lblDataDirectory.AutoSize = true;
+        lblDataDirectory.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
+        lblDataDirectory.Location = new System.Drawing.Point(449, 80);
+        lblDataDirectory.Name = "lblDataDirectory";
+        lblDataDirectory.Size = new System.Drawing.Size(216, 25);
+        lblDataDirectory.TabIndex = 17;
+        lblDataDirectory.Text = "Đường dẫn lưu dữ liệu";
         // 
-        // lblImageDirectory
+        // tbxDataDirectory
         // 
-        lblImageDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
-        lblImageDirectory.AutoSize = true;
-        lblImageDirectory.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
-        lblImageDirectory.Location = new System.Drawing.Point(449, 80);
-        lblImageDirectory.Name = "lblImageDirectory";
-        lblImageDirectory.Size = new System.Drawing.Size(187, 25);
-        lblImageDirectory.TabIndex = 17;
-        lblImageDirectory.Text = "Đường dẫn lưu ảnh";
+        tbxDataDirectory.BackColor = System.Drawing.SystemColors.Window;
+        tbxDataDirectory.Font = new System.Drawing.Font("Segoe UI", 14.25F);
+        tbxDataDirectory.ForeColor = System.Drawing.SystemColors.WindowText;
+        tbxDataDirectory.Location = new System.Drawing.Point(449, 112);
+        tbxDataDirectory.Name = "tbxDataDirectory";
+        tbxDataDirectory.Size = new System.Drawing.Size(293, 33);
+        tbxDataDirectory.TabIndex = 18;
         // 
-        // tbxImageDirectory
+        // btnDataDirectory
         // 
-        tbxImageDirectory.BackColor = System.Drawing.SystemColors.Window;
-        tbxImageDirectory.Font = new System.Drawing.Font("Segoe UI", 14.25F);
-        tbxImageDirectory.ForeColor = System.Drawing.SystemColors.WindowText;
-        tbxImageDirectory.Location = new System.Drawing.Point(449, 112);
-        tbxImageDirectory.Name = "tbxImageDirectory";
-        tbxImageDirectory.Size = new System.Drawing.Size(293, 33);
-        tbxImageDirectory.TabIndex = 18;
-        // 
-        // btnImageDirectory
-        // 
-        btnImageDirectory.BackColor = System.Drawing.SystemColors.Window;
-        btnImageDirectory.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
-        btnImageDirectory.ForeColor = System.Drawing.SystemColors.WindowText;
-        btnImageDirectory.Location = new System.Drawing.Point(748, 112);
-        btnImageDirectory.Name = "btnImageDirectory";
-        btnImageDirectory.Size = new System.Drawing.Size(124, 34);
-        btnImageDirectory.TabIndex = 19;
-        btnImageDirectory.Text = "Chọn";
-        btnImageDirectory.UseVisualStyleBackColor = false;
-        btnImageDirectory.Click += btnImageDirectory_Click;
+        btnDataDirectory.BackColor = System.Drawing.SystemColors.Window;
+        btnDataDirectory.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
+        btnDataDirectory.ForeColor = System.Drawing.SystemColors.WindowText;
+        btnDataDirectory.Location = new System.Drawing.Point(748, 112);
+        btnDataDirectory.Name = "btnDataDirectory";
+        btnDataDirectory.Size = new System.Drawing.Size(124, 34);
+        btnDataDirectory.TabIndex = 19;
+        btnDataDirectory.Text = "Chọn";
+        btnDataDirectory.UseVisualStyleBackColor = false;
+        btnDataDirectory.Click += btnDataDirectory_Click;
         // 
         // Main
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         BackColor = System.Drawing.SystemColors.Control;
-        ClientSize = new System.Drawing.Size(884, 529);
-        Controls.Add(btnImageDirectory);
-        Controls.Add(tbxImageDirectory);
-        Controls.Add(lblImageDirectory);
-        Controls.Add(chbIsAutoStart);
+        ClientSize = new System.Drawing.Size(884, 578);
+        Controls.Add(btnDataDirectory);
+        Controls.Add(tbxDataDirectory);
+        Controls.Add(lblDataDirectory);
         Controls.Add(rtbLogs);
         Controls.Add(cbNetworkInterfaces);
         Controls.Add(tbxMaxDiskSize);
@@ -272,10 +252,10 @@ partial class Main
         PerformLayout();
     }
 
-    private System.Windows.Forms.TextBox tbxImageDirectory;
-    private System.Windows.Forms.Button btnImageDirectory;
+    private System.Windows.Forms.TextBox tbxDataDirectory;
+    private System.Windows.Forms.Button btnDataDirectory;
 
-    private System.Windows.Forms.Label lblImageDirectory;
+    private System.Windows.Forms.Label lblDataDirectory;
 
     private System.Windows.Forms.Label lbl_ipaddresss;
     private System.Windows.Forms.NumericUpDown numericUpDown1;
@@ -299,5 +279,4 @@ partial class Main
     private System.Windows.Forms.ComboBox cbNetworkInterfaces;
     private System.Windows.Forms.Label lblNetworkInterface;
     private System.Windows.Forms.RichTextBox rtbLogs;
-    private System.Windows.Forms.CheckBox chbIsAutoStart;
 }
