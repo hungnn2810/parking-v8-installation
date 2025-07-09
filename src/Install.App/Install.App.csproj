@@ -11,6 +11,10 @@
         <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <PublishSingleFile>true</PublishSingleFile>
+    </PropertyGroup>
+
     <ItemGroup>
       <Compile Update="Properties\Settings.Designer.cs">
         <DesignTimeSharedInput>True</DesignTimeSharedInput>
