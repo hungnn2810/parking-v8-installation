@@ -113,7 +113,7 @@ partial class Main
         btnStart.BackColor = System.Drawing.Color.DodgerBlue;
         btnStart.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
         btnStart.ForeColor = System.Drawing.SystemColors.Window;
-        btnStart.Location = new System.Drawing.Point(342, 168);
+        btnStart.Location = new System.Drawing.Point(421, 169);
         btnStart.Name = "btnStart";
         btnStart.Size = new System.Drawing.Size(191, 34);
         btnStart.TabIndex = 0;

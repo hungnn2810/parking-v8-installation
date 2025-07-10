@@ -183,7 +183,6 @@ public partial class Main : Form
                     $"  config.vm.network \"public_network\", ip: \"{Properties.Settings.Default.IpAddress}\", bridge: \"{Properties.Settings.Default.NetworkInterface}\"");
                 content.AppendLine($"  config.vm.synced_folder \"{Properties.Settings.Default.DataDirectory}/minio\", \"/srv/psi8/minio\", mount_options: [\"dmode=775\", \"fmode=664\"]");
                 content.AppendLine($"  config.vm.synced_folder \"{Properties.Settings.Default.DataDirectory}/db-backups\", \"/srv/psi8/postgresql/backups\", mount_options: [\"dmode=775\", \"fmode=664\"]");
-                content.AppendLine("  config.vm.provision \"docker\"");
                 content.AppendLine("  config.vm.provision :shell, path: \"core/bootstrap.sh\", run: 'always'");
                 content.AppendLine("end");
                 File.WriteAllText("Vagrantfile", content.ToString());

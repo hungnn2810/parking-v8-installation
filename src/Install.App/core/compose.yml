@@ -288,7 +288,7 @@ services:
       Api__Configuration: "http://configuration-service:8080"
       Api__Resource: "http://resource-service:8080"
       Api__User: "http://user-service:8080"
-      S3__Endpoint: "14.160.26.45:12549"
+      S3__Endpoint: "${IP_ADDRESS}:9000"
       S3__Ssl: "false"
       S3__AccessKey: "admin"
       S3__SecretKey: "Pass1234!"
