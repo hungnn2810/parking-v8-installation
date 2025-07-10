@@ -74,7 +74,7 @@ partial class Main
         // 
         lblRam.AutoSize = true;
         lblRam.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
-        lblRam.Location = new System.Drawing.Point(680, 8);
+        lblRam.Location = new System.Drawing.Point(817, 9);
         lblRam.Name = "lblRam";
         lblRam.Size = new System.Drawing.Size(179, 25);
         lblRam.TabIndex = 2;
@@ -84,7 +84,7 @@ partial class Main
         // 
         lbl_Cpus.AutoSize = true;
         lbl_Cpus.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
-        lbl_Cpus.Location = new System.Drawing.Point(456, 8);
+        lbl_Cpus.Location = new System.Drawing.Point(538, 8);
         lbl_Cpus.Name = "lbl_Cpus";
         lbl_Cpus.Size = new System.Drawing.Size(195, 25);
         lbl_Cpus.TabIndex = 4;
@@ -93,7 +93,7 @@ partial class Main
         // nudCpus
         // 
         nudCpus.Font = new System.Drawing.Font("Segoe UI", 14.25F);
-        nudCpus.Location = new System.Drawing.Point(456, 40);
+        nudCpus.Location = new System.Drawing.Point(538, 40);
         nudCpus.Name = "nudCpus";
         nudCpus.Size = new System.Drawing.Size(184, 33);
         nudCpus.TabIndex = 3;
@@ -102,7 +102,7 @@ partial class Main
         // nudRam
         // 
         nudRam.Font = new System.Drawing.Font("Segoe UI", 14.25F);
-        nudRam.Location = new System.Drawing.Point(681, 40);
+        nudRam.Location = new System.Drawing.Point(818, 41);
         nudRam.Name = "nudRam";
         nudRam.Size = new System.Drawing.Size(191, 33);
         nudRam.TabIndex = 4;
@@ -124,7 +124,7 @@ partial class Main
         // tbxMaxDiskSize
         // 
         tbxMaxDiskSize.Font = new System.Drawing.Font("Segoe UI", 14.25F);
-        tbxMaxDiskSize.Location = new System.Drawing.Point(236, 40);
+        tbxMaxDiskSize.Location = new System.Drawing.Point(267, 40);
         tbxMaxDiskSize.Name = "tbxMaxDiskSize";
         tbxMaxDiskSize.Size = new System.Drawing.Size(191, 33);
         tbxMaxDiskSize.TabIndex = 2;
@@ -133,7 +133,7 @@ partial class Main
         // 
         lblMaxDiskSize.AutoSize = true;
         lblMaxDiskSize.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
-        lblMaxDiskSize.Location = new System.Drawing.Point(236, 8);
+        lblMaxDiskSize.Location = new System.Drawing.Point(267, 8);
         lblMaxDiskSize.Name = "lblMaxDiskSize";
         lblMaxDiskSize.Size = new System.Drawing.Size(200, 25);
         lblMaxDiskSize.TabIndex = 9;
@@ -162,7 +162,7 @@ partial class Main
         cbNetworkInterfaces.FormattingEnabled = true;
         cbNetworkInterfaces.Location = new System.Drawing.Point(8, 112);
         cbNetworkInterfaces.Name = "cbNetworkInterfaces";
-        cbNetworkInterfaces.Size = new System.Drawing.Size(416, 33);
+        cbNetworkInterfaces.Size = new System.Drawing.Size(564, 33);
         cbNetworkInterfaces.TabIndex = 5;
         // 
         // lblNetworkInterface
@@ -180,7 +180,7 @@ partial class Main
         rtbLogs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
         rtbLogs.Location = new System.Drawing.Point(8, 230);
         rtbLogs.Name = "rtbLogs";
-        rtbLogs.Size = new System.Drawing.Size(864, 336);
+        rtbLogs.Size = new System.Drawing.Size(1009, 336);
         rtbLogs.TabIndex = 15;
         rtbLogs.Text = "";
         rtbLogs.TextChanged += rtbLogs_TextChanged;
@@ -189,7 +189,7 @@ partial class Main
         // 
         lblDataDirectory.AutoSize = true;
         lblDataDirectory.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
-        lblDataDirectory.Location = new System.Drawing.Point(449, 80);
+        lblDataDirectory.Location = new System.Drawing.Point(589, 79);
         lblDataDirectory.Name = "lblDataDirectory";
         lblDataDirectory.Size = new System.Drawing.Size(216, 25);
         lblDataDirectory.TabIndex = 17;
@@ -200,7 +200,7 @@ partial class Main
         tbxDataDirectory.BackColor = System.Drawing.SystemColors.Window;
         tbxDataDirectory.Font = new System.Drawing.Font("Segoe UI", 14.25F);
         tbxDataDirectory.ForeColor = System.Drawing.SystemColors.WindowText;
-        tbxDataDirectory.Location = new System.Drawing.Point(449, 112);
+        tbxDataDirectory.Location = new System.Drawing.Point(589, 111);
         tbxDataDirectory.Name = "tbxDataDirectory";
         tbxDataDirectory.Size = new System.Drawing.Size(293, 33);
         tbxDataDirectory.TabIndex = 18;
@@ -210,7 +210,7 @@ partial class Main
         btnDataDirectory.BackColor = System.Drawing.SystemColors.Window;
         btnDataDirectory.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
         btnDataDirectory.ForeColor = System.Drawing.SystemColors.WindowText;
-        btnDataDirectory.Location = new System.Drawing.Point(748, 112);
+        btnDataDirectory.Location = new System.Drawing.Point(888, 111);
         btnDataDirectory.Name = "btnDataDirectory";
         btnDataDirectory.Size = new System.Drawing.Size(124, 34);
         btnDataDirectory.TabIndex = 19;
@@ -223,7 +223,7 @@ partial class Main
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         BackColor = System.Drawing.SystemColors.Control;
-        ClientSize = new System.Drawing.Size(884, 578);
+        ClientSize = new System.Drawing.Size(1029, 578);
         Controls.Add(btnDataDirectory);
         Controls.Add(tbxDataDirectory);
         Controls.Add(lblDataDirectory);

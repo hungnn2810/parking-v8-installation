@@ -16,6 +16,11 @@ public partial class Main : Form
 
     private async void Main_Load(object? sender, EventArgs e)
     {
+        foreach (var item in NetworkInterface.GetAllNetworkInterfaces().OrderBy(n => n.Description))
+        {
+            cbNetworkInterfaces.Items.Add(item.Description);
+        }
+        
         if (string.IsNullOrEmpty(Properties.Settings.Default.IpAddress))
         {
             return;
@@ -27,12 +32,7 @@ public partial class Main : Form
         {
             return;
         }
-
-        foreach (var item in NetworkInterface.GetAllNetworkInterfaces().OrderBy(n => n.Description))
-        {
-            cbNetworkInterfaces.Items.Add(item.Description);
-        }
-
+        
         cbNetworkInterfaces.DropDownStyle = ComboBoxStyle.DropDownList;
         cbNetworkInterfaces.SelectedIndex = cbNetworkInterfaces.FindStringExact(Properties.Settings.Default.NetworkInterface);
         if (cbNetworkInterfaces.SelectedIndex < 0)
