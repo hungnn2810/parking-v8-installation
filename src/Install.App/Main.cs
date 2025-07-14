@@ -199,6 +199,9 @@ public partial class Main : Form
     {
         WriteLog("Bắt đầu cài đặt");
 
+        EnsureExistDirectory($"{Properties.Settings.Default.DataDirectory}/minio");
+        EnsureExistDirectory($"{Properties.Settings.Default.DataDirectory}/db-backups");
+        
         await InitVagrantFileAsync();
         await InitEnvironmentAsync();
         await InstallVagrantPluginAsync();
@@ -209,9 +212,6 @@ public partial class Main : Form
 
     private async Task InitVagrantFileAsync()
     {
-        EnsureExistDirectory($"{Properties.Settings.Default.DataDirectory}/minio");
-        EnsureExistDirectory($"{Properties.Settings.Default.DataDirectory}/db-backups");
-
         await Task.Run(() =>
         {
             try

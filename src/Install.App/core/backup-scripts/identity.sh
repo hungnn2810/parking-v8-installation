@@ -8,7 +8,7 @@ date=$(date '+%Y-%m-%d')
 db='identity'
 
 # Backup file name
-backup_file="/srv/psi8/postgresql/backups/${date}_${db}.bak"
+backup_file="/srv/psi8/postgresql/backups/${db}.bak"
 
 # Run the pg_dump command with password and options
 PGPASSWORD="Pass1234!" /usr/bin/pg_dump \
