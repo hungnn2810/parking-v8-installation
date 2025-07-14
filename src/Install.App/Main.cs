@@ -20,7 +20,8 @@ public partial class Main : Form
         {
             cbNetworkInterfaces.Items.Add(item.Description);
         }
-        
+
+        // IpAddress
         if (string.IsNullOrEmpty(Properties.Settings.Default.IpAddress))
         {
             return;
@@ -28,11 +29,35 @@ public partial class Main : Form
 
         tbxIpAddress.Text = Properties.Settings.Default.IpAddress;
 
+        // Gateway
+        if (string.IsNullOrEmpty(Properties.Settings.Default.Gateway))
+        {
+            return;
+        }
+
+        tbxGateway.Text = Properties.Settings.Default.Gateway;
+
+        // IpPublicAddress
+        ckbUseIpPublic.Checked = Properties.Settings.Default.UseIpPublic;
+        if (ckbUseIpPublic.Checked)
+        {
+            lblIpPublicAddress.Visible = true;
+            tbxIpPublicAddress.Visible = true;
+            tbxIpPublicAddress.Text = Properties.Settings.Default.IpPublicAddress;
+        }
+        else
+        {
+            lblIpPublicAddress.Visible = false;
+            tbxIpPublicAddress.Visible = false;
+            tbxIpPublicAddress.Text = string.Empty;
+        }
+
+        // NetworkInterface
         if (string.IsNullOrEmpty(Properties.Settings.Default.NetworkInterface))
         {
             return;
         }
-        
+
         cbNetworkInterfaces.DropDownStyle = ComboBoxStyle.DropDownList;
         cbNetworkInterfaces.SelectedIndex = cbNetworkInterfaces.FindStringExact(Properties.Settings.Default.NetworkInterface);
         if (cbNetworkInterfaces.SelectedIndex < 0)
@@ -40,6 +65,7 @@ public partial class Main : Form
             cbNetworkInterfaces.SelectedIndex = 0;
         }
 
+        // Ram
         if (Properties.Settings.Default.Ram <= 7)
         {
             return;
@@ -47,6 +73,7 @@ public partial class Main : Form
 
         nudRam.Value = Properties.Settings.Default.Ram;
 
+        // Cpu
         if (Properties.Settings.Default.Cpu <= 5)
         {
             return;
@@ -59,6 +86,7 @@ public partial class Main : Form
             return;
         }
 
+        // MaxDiskSize
         tbxMaxDiskSize.Text = Properties.Settings.Default.MaxDiskSize.ToString();
 
         if (string.IsNullOrEmpty(Properties.Settings.Default.DataDirectory))
@@ -100,6 +128,21 @@ public partial class Main : Form
             return;
         }
 
+        var gateway = tbxGateway.Text.TrimStart().TrimEnd();
+        if (string.IsNullOrWhiteSpace(gateway))
+        {
+            MessageBox.Show("Yêu cầu nhập gateway", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
+        var useIpPublic = ckbUseIpPublic.Checked;
+        var ipPublic = tbxIpPublicAddress.Text.TrimStart().TrimEnd();
+        if (useIpPublic && string.IsNullOrWhiteSpace(ipPublic))
+        {
+            MessageBox.Show("Yêu cầu ip public", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
         var networkInterface = cbNetworkInterfaces.Text.TrimStart().TrimEnd();
         if (string.IsNullOrWhiteSpace(networkInterface))
         {
@@ -136,6 +179,9 @@ public partial class Main : Form
         }
 
         Properties.Settings.Default.IpAddress = ipAddress;
+        Properties.Settings.Default.Gateway = gateway;
+        Properties.Settings.Default.UseIpPublic = useIpPublic;
+        Properties.Settings.Default.IpPublicAddress = ipPublic;
         Properties.Settings.Default.NetworkInterface = cbNetworkInterfaces.Text;
         Properties.Settings.Default.Ram = ram;
         Properties.Settings.Default.Cpu = cpu;
@@ -181,9 +227,18 @@ public partial class Main : Form
                 content.AppendLine("  end");
                 content.AppendLine(
                     $"  config.vm.network \"public_network\", ip: \"{Properties.Settings.Default.IpAddress}\", bridge: \"{Properties.Settings.Default.NetworkInterface}\"");
-                content.AppendLine($"  config.vm.synced_folder \"{Properties.Settings.Default.DataDirectory}/minio\", \"/srv/psi8/minio\", mount_options: [\"dmode=775\", \"fmode=664\"]");
-                content.AppendLine($"  config.vm.synced_folder \"{Properties.Settings.Default.DataDirectory}/db-backups\", \"/srv/psi8/postgresql/backups\", mount_options: [\"dmode=775\", \"fmode=664\"]");
-                content.AppendLine("  config.vm.provision :shell, path: \"core/bootstrap.sh\", run: 'always'");
+                content.AppendLine("  config.vm.provision \"shell\", inline: <<-SHELL");
+                content.AppendLine($"    sudo ip route add default via {Properties.Settings.Default.Gateway}");
+                content.AppendLine("  SHELL");
+                content.AppendLine(
+                    $"  config.vm.synced_folder \"{Properties.Settings.Default.DataDirectory}/minio\", \"/srv/psi8/minio\", mount_options: [\"dmode=775\", \"fmode=664\"]");
+                content.AppendLine(
+                    $"  config.vm.synced_folder \"{Properties.Settings.Default.DataDirectory}/db-backups\", \"/srv/psi8/postgresql/backups\", mount_options: [\"dmode=775\", \"fmode=664\"]");
+
+                content.AppendLine(Properties.Settings.Default.UseIpPublic
+                    ? "  config.vm.provision :shell, path: \"core/bootstrap.sh\", run: 'always'"
+                    : "  config.vm.provision :shell, path: \"core/bootstrap.local.sh\", run: 'always'");
+
                 content.AppendLine("end");
                 File.WriteAllText("Vagrantfile", content.ToString());
                 return true;
@@ -223,6 +278,15 @@ public partial class Main : Form
                 content.AppendLine("RABBITMQ_SSL=false");
                 content.AppendLine("RABBITMQ_USERNAME=rabbitmq");
                 content.AppendLine("RABBITMQ_PASSWORD=Pass1234!");
+
+                if (Properties.Settings.Default.UseIpPublic && !string.IsNullOrEmpty(Properties.Settings.Default.IpPublicAddress))
+                {
+                    content.AppendLine($"IP_PUBLIC_ADDRESS={Properties.Settings.Default.IpPublicAddress}");
+                    content.AppendLine("OAUTH_PUBLIC=http://${IP_PUBLIC_ADDRESS}:3001");
+                    content.AppendLine("API_GATEWAY_PUBLIC=http://${IP_PUBLIC_ADDRESS}:5001");
+                    content.AppendLine("WEB_PUBLIC_URL=http://${IP_PUBLIC_ADDRESS}:2001");
+                    content.AppendLine("RABBITMQ_STOMP_PUBLIC_ENDPOINT=${IP_ADDRESS}:15676");
+                }
 
                 var file = new FileInfo("core/.env");
                 file.Directory?.Create(); // If the directory already exists, this method does nothing.
@@ -334,6 +398,21 @@ public partial class Main : Form
         if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
         {
             tbxDataDirectory.Text = fbd.SelectedPath.Replace("\\", "/");
+        }
+    }
+
+    private void ckbUseIpPublic_CheckedChanged(object sender, EventArgs e)
+    {
+        if (ckbUseIpPublic.Checked)
+        {
+            lblIpPublicAddress.Visible = true;
+            tbxIpPublicAddress.Visible = true;
+        }
+        else
+        {
+            lblIpPublicAddress.Visible = false;
+            tbxIpPublicAddress.Visible = false;
+            tbxIpPublicAddress.Text = string.Empty;
         }
     }
 }

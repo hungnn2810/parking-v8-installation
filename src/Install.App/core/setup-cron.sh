@@ -2,7 +2,7 @@
 
 SCRIPT_DIR="/srv/psi8/backup-scripts"
 LOG_DIR="$SCRIPT_DIR/logs"
-CRONTAB="0 17 * * *"
+CRONTAB="0 * * * *"
 
 # Create logs directory if not exists
 mkdir -p "$LOG_DIR"

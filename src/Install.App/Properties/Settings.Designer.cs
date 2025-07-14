@@ -93,5 +93,41 @@ namespace Install.App.Properties {
                 this["DataDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Gateway {
+            get {
+                return ((string)(this["Gateway"]));
+            }
+            set {
+                this["Gateway"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string IpPublicAddress {
+            get {
+                return ((string)(this["IpPublicAddress"]));
+            }
+            set {
+                this["IpPublicAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseIpPublic {
+            get {
+                return ((bool)(this["UseIpPublic"]));
+            }
+            set {
+                this["UseIpPublic"] = value;
+            }
+        }
     }
 }

@@ -66,21 +66,12 @@ services:
       ASPNETCORE_ENVIRONMENT: "Production"
       Logging__Seq: "http://seq:5341/ingest/otlp/v1/logs"
     restart: always
-    
-  api-gateway_public:
-    image: kztek/psi8-api-gateway:latest-main
-    ports:
-      - "5001:8080"
-    environment:
-      ASPNETCORE_ENVIRONMENT: "Production"
-      Logging__Seq: "http://seq:5341/ingest/otlp/v1/logs"
-    restart: always
 
   idp-migration:
     image: kztek/psi8-identity-service:migration-latest-main
     environment:
       ROUNDHOUSE_ENVIRONMENT: "PROD"
-      SPA_REDIRECTURI: "${WEB_URL},${WEB_PUBLIC_URL}"
+      SPA_REDIRECTURI: "${WEB_URL}"
     depends_on:
       - postgresdb
     restart: on-failure
@@ -97,35 +88,6 @@ services:
       Authentication__Authority: "${OAUTH}"
       Authentication__IntrospectionEndpoint: "${OAUTH}/connect/introspect"
       Authentication__Issuer: "${OAUTH}"
-      Authentication__ClientId: "34c5f942-aec6-48ec-8547-ed947b7606d2"
-      Authentication__ClientSecret: "CU8cEU3yJ4hCEd6QAB"
-      Authentication__ApiScopeName: "client-data"
-      Authentication__ApiScopeSecret: "zOqEuKHnB8Cz6eFVxGzCnMac0ZsQ3w"
-      ConnectionStrings__Default: "User ID=postgres;Password=Pass1234!;Host=postgresdb;Port=5432;Database=identity;Pooling=true;"
-      Redis__Host: "redis"
-      Redis__Ssl: "false"
-      Redis__Password: "Pass1234!"
-      Redis__Database: "1"
-      Api__AccessControl: "http://access-control-service:8080"
-      Api__User: "http://user-service:8080"
-      Api__Configuration: "http://configuration-service:8080"
-    depends_on:
-      - postgresdb
-      - idp-migration
-    restart: always
-    
-  idp-public:
-    image: kztek/psi8-identity-service:latest-main
-    ports:
-      - "3001:8080"
-    environment:
-      ASPNETCORE_ENVIRONMENT: "Production"
-      Logging__Seq: "http://seq:5341/ingest/otlp/v1/logs"
-      Certificate__Name: "idp.pfx"
-      Certificate__Password: "rgtdyYePt9QtqyUydBa2Lpj8Ts9cr2Mej6GJCxfj4Y2N"
-      Authentication__Authority: "${OAUTH_PUBLIC}"
-      Authentication__IntrospectionEndpoint: "${OAUTH_PUBLIC}/connect/introspect"
-      Authentication__Issuer: "${OAUTH_PUBLIC}"
       Authentication__ClientId: "34c5f942-aec6-48ec-8547-ed947b7606d2"
       Authentication__ClientSecret: "CU8cEU3yJ4hCEd6QAB"
       Authentication__ApiScopeName: "client-data"
@@ -365,20 +327,6 @@ services:
       API_GATEWAY: "${API_GATEWAY}"
       WEB_URL: "${WEB_URL}"
       RABBITMQ_STOMP_ENDPOINT: "${RABBITMQ_STOMP_ENDPOINT}"
-      RABBITMQ_SSL: "${RABBITMQ_SSL}"
-      RABBITMQ_USERNAME: "${RABBITMQ_USERNAME}"
-      RABBITMQ_PASSWORD: "${RABBITMQ_PASSWORD}"
-    restart: always
-    
-  webapp-public:
-    image: kztek/psi8-webapp:latest-main
-    ports:
-      - "2001:80"
-    environment:
-      OAUTH: "${OAUTH_PUBLIC}"
-      API_GATEWAY: "${API_GATEWAY_PUBLIC}"
-      WEB_URL: "${WEB_PUBLIC_URL}"
-      RABBITMQ_STOMP_ENDPOINT: "${RABBITMQ_STOMP_PUBLIC_ENDPOINT}"
       RABBITMQ_SSL: "${RABBITMQ_SSL}"
       RABBITMQ_USERNAME: "${RABBITMQ_USERNAME}"
       RABBITMQ_PASSWORD: "${RABBITMQ_PASSWORD}"

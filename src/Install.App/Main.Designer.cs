@@ -47,6 +47,11 @@ partial class Main
         lblDataDirectory = new System.Windows.Forms.Label();
         tbxDataDirectory = new System.Windows.Forms.TextBox();
         btnDataDirectory = new System.Windows.Forms.Button();
+        tbxGateway = new System.Windows.Forms.TextBox();
+        lblGateway = new System.Windows.Forms.Label();
+        tbxIpPublicAddress = new System.Windows.Forms.TextBox();
+        lblIpPublicAddress = new System.Windows.Forms.Label();
+        ckbUseIpPublic = new System.Windows.Forms.CheckBox();
         ((System.ComponentModel.ISupportInitialize)nudCpus).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudRam).BeginInit();
         ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
@@ -56,7 +61,7 @@ partial class Main
         // 
         lblIpAddress.AutoSize = true;
         lblIpAddress.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
-        lblIpAddress.Location = new System.Drawing.Point(8, 8);
+        lblIpAddress.Location = new System.Drawing.Point(23, 19);
         lblIpAddress.Name = "lblIpAddress";
         lblIpAddress.Size = new System.Drawing.Size(94, 25);
         lblIpAddress.TabIndex = 0;
@@ -65,16 +70,16 @@ partial class Main
         // tbxIpAddress
         // 
         tbxIpAddress.Font = new System.Drawing.Font("Segoe UI", 14.25F);
-        tbxIpAddress.Location = new System.Drawing.Point(8, 40);
+        tbxIpAddress.Location = new System.Drawing.Point(23, 51);
         tbxIpAddress.Name = "tbxIpAddress";
-        tbxIpAddress.Size = new System.Drawing.Size(191, 33);
+        tbxIpAddress.Size = new System.Drawing.Size(214, 33);
         tbxIpAddress.TabIndex = 1;
         // 
         // lblRam
         // 
         lblRam.AutoSize = true;
         lblRam.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
-        lblRam.Location = new System.Drawing.Point(817, 9);
+        lblRam.Location = new System.Drawing.Point(255, 195);
         lblRam.Name = "lblRam";
         lblRam.Size = new System.Drawing.Size(179, 25);
         lblRam.TabIndex = 2;
@@ -84,7 +89,7 @@ partial class Main
         // 
         lbl_Cpus.AutoSize = true;
         lbl_Cpus.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
-        lbl_Cpus.Location = new System.Drawing.Point(538, 8);
+        lbl_Cpus.Location = new System.Drawing.Point(23, 195);
         lbl_Cpus.Name = "lbl_Cpus";
         lbl_Cpus.Size = new System.Drawing.Size(195, 25);
         lbl_Cpus.TabIndex = 4;
@@ -93,7 +98,7 @@ partial class Main
         // nudCpus
         // 
         nudCpus.Font = new System.Drawing.Font("Segoe UI", 14.25F);
-        nudCpus.Location = new System.Drawing.Point(538, 40);
+        nudCpus.Location = new System.Drawing.Point(23, 227);
         nudCpus.Name = "nudCpus";
         nudCpus.Size = new System.Drawing.Size(184, 33);
         nudCpus.TabIndex = 3;
@@ -102,7 +107,7 @@ partial class Main
         // nudRam
         // 
         nudRam.Font = new System.Drawing.Font("Segoe UI", 14.25F);
-        nudRam.Location = new System.Drawing.Point(818, 41);
+        nudRam.Location = new System.Drawing.Point(256, 227);
         nudRam.Name = "nudRam";
         nudRam.Size = new System.Drawing.Size(191, 33);
         nudRam.TabIndex = 4;
@@ -113,7 +118,7 @@ partial class Main
         btnStart.BackColor = System.Drawing.Color.DodgerBlue;
         btnStart.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
         btnStart.ForeColor = System.Drawing.SystemColors.Window;
-        btnStart.Location = new System.Drawing.Point(421, 169);
+        btnStart.Location = new System.Drawing.Point(436, 292);
         btnStart.Name = "btnStart";
         btnStart.Size = new System.Drawing.Size(191, 34);
         btnStart.TabIndex = 0;
@@ -124,16 +129,17 @@ partial class Main
         // tbxMaxDiskSize
         // 
         tbxMaxDiskSize.Font = new System.Drawing.Font("Segoe UI", 14.25F);
-        tbxMaxDiskSize.Location = new System.Drawing.Point(267, 40);
+        tbxMaxDiskSize.Location = new System.Drawing.Point(490, 227);
         tbxMaxDiskSize.Name = "tbxMaxDiskSize";
         tbxMaxDiskSize.Size = new System.Drawing.Size(191, 33);
         tbxMaxDiskSize.TabIndex = 2;
+        tbxMaxDiskSize.Text = "50";
         // 
         // lblMaxDiskSize
         // 
         lblMaxDiskSize.AutoSize = true;
         lblMaxDiskSize.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
-        lblMaxDiskSize.Location = new System.Drawing.Point(267, 8);
+        lblMaxDiskSize.Location = new System.Drawing.Point(490, 195);
         lblMaxDiskSize.Name = "lblMaxDiskSize";
         lblMaxDiskSize.Size = new System.Drawing.Size(200, 25);
         lblMaxDiskSize.TabIndex = 9;
@@ -160,16 +166,16 @@ partial class Main
         // 
         cbNetworkInterfaces.Font = new System.Drawing.Font("Segoe UI", 14.25F);
         cbNetworkInterfaces.FormattingEnabled = true;
-        cbNetworkInterfaces.Location = new System.Drawing.Point(8, 112);
+        cbNetworkInterfaces.Location = new System.Drawing.Point(23, 128);
         cbNetworkInterfaces.Name = "cbNetworkInterfaces";
-        cbNetworkInterfaces.Size = new System.Drawing.Size(564, 33);
+        cbNetworkInterfaces.Size = new System.Drawing.Size(490, 33);
         cbNetworkInterfaces.TabIndex = 5;
         // 
         // lblNetworkInterface
         // 
         lblNetworkInterface.AutoSize = true;
         lblNetworkInterface.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
-        lblNetworkInterface.Location = new System.Drawing.Point(8, 80);
+        lblNetworkInterface.Location = new System.Drawing.Point(23, 96);
         lblNetworkInterface.Name = "lblNetworkInterface";
         lblNetworkInterface.Size = new System.Drawing.Size(116, 25);
         lblNetworkInterface.TabIndex = 0;
@@ -178,9 +184,9 @@ partial class Main
         // rtbLogs
         // 
         rtbLogs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
-        rtbLogs.Location = new System.Drawing.Point(8, 230);
+        rtbLogs.Location = new System.Drawing.Point(8, 350);
         rtbLogs.Name = "rtbLogs";
-        rtbLogs.Size = new System.Drawing.Size(1009, 336);
+        rtbLogs.Size = new System.Drawing.Size(1064, 361);
         rtbLogs.TabIndex = 15;
         rtbLogs.Text = "";
         rtbLogs.TextChanged += rtbLogs_TextChanged;
@@ -189,7 +195,7 @@ partial class Main
         // 
         lblDataDirectory.AutoSize = true;
         lblDataDirectory.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
-        lblDataDirectory.Location = new System.Drawing.Point(589, 79);
+        lblDataDirectory.Location = new System.Drawing.Point(726, 195);
         lblDataDirectory.Name = "lblDataDirectory";
         lblDataDirectory.Size = new System.Drawing.Size(216, 25);
         lblDataDirectory.TabIndex = 17;
@@ -200,9 +206,9 @@ partial class Main
         tbxDataDirectory.BackColor = System.Drawing.SystemColors.Window;
         tbxDataDirectory.Font = new System.Drawing.Font("Segoe UI", 14.25F);
         tbxDataDirectory.ForeColor = System.Drawing.SystemColors.WindowText;
-        tbxDataDirectory.Location = new System.Drawing.Point(589, 111);
+        tbxDataDirectory.Location = new System.Drawing.Point(726, 227);
         tbxDataDirectory.Name = "tbxDataDirectory";
-        tbxDataDirectory.Size = new System.Drawing.Size(293, 33);
+        tbxDataDirectory.Size = new System.Drawing.Size(236, 33);
         tbxDataDirectory.TabIndex = 18;
         // 
         // btnDataDirectory
@@ -210,20 +216,74 @@ partial class Main
         btnDataDirectory.BackColor = System.Drawing.SystemColors.Window;
         btnDataDirectory.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
         btnDataDirectory.ForeColor = System.Drawing.SystemColors.WindowText;
-        btnDataDirectory.Location = new System.Drawing.Point(888, 111);
+        btnDataDirectory.Location = new System.Drawing.Point(967, 225);
         btnDataDirectory.Name = "btnDataDirectory";
-        btnDataDirectory.Size = new System.Drawing.Size(124, 34);
+        btnDataDirectory.Size = new System.Drawing.Size(90, 34);
         btnDataDirectory.TabIndex = 19;
         btnDataDirectory.Text = "Chọn";
         btnDataDirectory.UseVisualStyleBackColor = false;
         btnDataDirectory.Click += btnDataDirectory_Click;
+        // 
+        // tbxGateway
+        // 
+        tbxGateway.Font = new System.Drawing.Font("Segoe UI", 14.25F);
+        tbxGateway.Location = new System.Drawing.Point(288, 52);
+        tbxGateway.Name = "tbxGateway";
+        tbxGateway.Size = new System.Drawing.Size(214, 33);
+        tbxGateway.TabIndex = 21;
+        // 
+        // lblGateway
+        // 
+        lblGateway.AutoSize = true;
+        lblGateway.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
+        lblGateway.Location = new System.Drawing.Point(288, 20);
+        lblGateway.Name = "lblGateway";
+        lblGateway.Size = new System.Drawing.Size(88, 25);
+        lblGateway.TabIndex = 20;
+        lblGateway.Text = "Gateway";
+        // 
+        // tbxIpPublicAddress
+        // 
+        tbxIpPublicAddress.Font = new System.Drawing.Font("Segoe UI", 14.25F);
+        tbxIpPublicAddress.Location = new System.Drawing.Point(726, 51);
+        tbxIpPublicAddress.Name = "tbxIpPublicAddress";
+        tbxIpPublicAddress.Size = new System.Drawing.Size(214, 33);
+        tbxIpPublicAddress.TabIndex = 23;
+        tbxIpPublicAddress.Visible = false;
+        // 
+        // lblIpPublicAddress
+        // 
+        lblIpPublicAddress.AutoSize = true;
+        lblIpPublicAddress.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)0));
+        lblIpPublicAddress.Location = new System.Drawing.Point(726, 19);
+        lblIpPublicAddress.Name = "lblIpPublicAddress";
+        lblIpPublicAddress.Size = new System.Drawing.Size(154, 25);
+        lblIpPublicAddress.TabIndex = 22;
+        lblIpPublicAddress.Text = "Địa chỉ IP public";
+        lblIpPublicAddress.Visible = false;
+        // 
+        // ckbUseIpPublic
+        // 
+        ckbUseIpPublic.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
+        ckbUseIpPublic.Location = new System.Drawing.Point(554, 52);
+        ckbUseIpPublic.Name = "ckbUseIpPublic";
+        ckbUseIpPublic.Size = new System.Drawing.Size(166, 30);
+        ckbUseIpPublic.TabIndex = 24;
+        ckbUseIpPublic.Text = "Dùng IP Public";
+        ckbUseIpPublic.UseVisualStyleBackColor = true;
+        ckbUseIpPublic.CheckedChanged += ckbUseIpPublic_CheckedChanged;
         // 
         // Main
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         BackColor = System.Drawing.SystemColors.Control;
-        ClientSize = new System.Drawing.Size(1029, 578);
+        ClientSize = new System.Drawing.Size(1084, 723);
+        Controls.Add(ckbUseIpPublic);
+        Controls.Add(tbxIpPublicAddress);
+        Controls.Add(lblIpPublicAddress);
+        Controls.Add(tbxGateway);
+        Controls.Add(lblGateway);
         Controls.Add(btnDataDirectory);
         Controls.Add(tbxDataDirectory);
         Controls.Add(lblDataDirectory);
@@ -251,6 +311,13 @@ partial class Main
         ResumeLayout(false);
         PerformLayout();
     }
+
+    private System.Windows.Forms.CheckBox ckbUseIpPublic;
+    private System.Windows.Forms.TextBox tbxIpPublicAddress;
+    private System.Windows.Forms.Label lblIpPublicAddress;
+
+    private System.Windows.Forms.TextBox tbxGateway;
+    private System.Windows.Forms.Label lblGateway;
 
     private System.Windows.Forms.TextBox tbxDataDirectory;
     private System.Windows.Forms.Button btnDataDirectory;
