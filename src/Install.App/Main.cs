@@ -1,3 +1,4 @@
+using KzIScale.SynchronousTool;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -11,12 +12,22 @@ public partial class Main : Form
     public Main()
     {
         InitializeComponent();
+        //ApplicationEx.AddToStartup();
         Load += Main_Load;
     }
 
     private async void Main_Load(object? sender, EventArgs e)
     {
-        foreach (var item in NetworkInterface.GetAllNetworkInterfaces().OrderBy(n => n.Description))
+        WriteLog("Get Network Interfaces");
+        var networks = NetworkInterface.GetAllNetworkInterfaces().ToList();
+        while (networks.Count == 0)
+        {
+            WriteLog("Get Network Interfaces");
+            await Task.Delay(1000);
+            networks = NetworkInterface.GetAllNetworkInterfaces().ToList();
+        }
+
+        foreach (var item in networks.OrderBy(n => n.Description))
         {
             cbNetworkInterfaces.Items.Add(item.Description);
         }
@@ -201,7 +212,7 @@ public partial class Main : Form
 
         EnsureExistDirectory($"{Properties.Settings.Default.DataDirectory}/minio");
         EnsureExistDirectory($"{Properties.Settings.Default.DataDirectory}/db-backups");
-        
+
         await InitVagrantFileAsync();
         await InitEnvironmentAsync();
         await InstallVagrantPluginAsync();
